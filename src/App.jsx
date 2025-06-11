@@ -9,7 +9,7 @@ const { Content } = Layout;
 function App() {
   return (
     <Router>
-      <Layout className="!min-h-screen w-full !bg-gray-100">
+      <Layout className="!min-h-screen w-full !bg-white">
         <Header />
         <Content className="w-full max-w-7xl mx-auto px-4 py-8">
           <Routes>

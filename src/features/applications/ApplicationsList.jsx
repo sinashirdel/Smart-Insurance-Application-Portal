@@ -74,14 +74,38 @@ const ApplicationsList = () => {
   return (
     <Card
       title="Applications"
+      className="w-full"
       extra={
-        <Space>
+        <div className="hidden md:block">
+          <Space className="w-full">
+            <Input
+              placeholder="Search..."
+              prefix={<Search size={16} />}
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              className="!w-full"
+              allowClear
+            />
+            <Popover
+              content={columnSettings}
+              title="Column Settings"
+              trigger="click"
+              placement="bottomRight"
+            >
+              <Button icon={<Settings2 size={16} />}>Columns</Button>
+            </Popover>
+          </Space>
+        </div>
+      }
+    >
+      <div className="md:hidden mb-4">
+        <Space className="w-full" direction="vertical" size="small">
           <Input
             placeholder="Search..."
             prefix={<Search size={16} />}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            style={{ width: 200 }}
+            className="!w-full"
             allowClear
           />
           <Popover
@@ -93,17 +117,19 @@ const ApplicationsList = () => {
             <Button icon={<Settings2 size={16} />}>Columns</Button>
           </Popover>
         </Space>
-      }
-    >
+      </div>
       <Table
         columns={tableColumns}
         dataSource={filteredData}
         loading={isLoading}
         rowKey="id"
+        scroll={{ x: "max-content" }}
+        className="w-full"
         pagination={{
           pageSize: 10,
           showSizeChanger: true,
           showTotal: (total) => `Total ${total} items`,
+          responsive: true,
         }}
       />
     </Card>
