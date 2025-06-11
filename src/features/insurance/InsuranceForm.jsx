@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Form,
   Select,
@@ -16,12 +16,17 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { useForms, useDynamicOptions, submitForm } from "../../services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useDrafts } from "../../context/DraftsContext";
+import { useLocation } from "react-router-dom";
+import dayjs from "dayjs";
 
 const InsuranceForm = () => {
   const [selectedForm, setSelectedForm] = useState(null);
-  const { control, handleSubmit, watch, setValue } = useForm();
+  const { control, handleSubmit, watch, setValue, reset } = useForm();
   const queryClient = useQueryClient();
   const formValues = watch();
+  const { saveDraft, getDraft } = useDrafts();
+  const location = useLocation();
 
   const {
     data: forms = [],
@@ -39,6 +44,67 @@ const InsuranceForm = () => {
       message.error("Failed to submit application");
     },
   });
+
+  // Load draft if coming from drafts list
+  useEffect(() => {
+    if (location.state?.formId) {
+      const draft = getDraft(location.state.formId);
+      if (draft) {
+        const form = forms.find((f) => f.formId === location.state.formId);
+        if (form) {
+          setSelectedForm(form);
+          // Convert date strings to dayjs objects
+          const processedDraft = Object.entries(draft).reduce(
+            (acc, [key, value]) => {
+              // Check if the field is a date field
+              const isDateField = form.fields.some(
+                (field) => field.id === key && field.type === "date"
+              );
+              acc[key] = isDateField && value ? dayjs(value) : value;
+              return acc;
+            },
+            {}
+          );
+          reset(processedDraft);
+        }
+      }
+    }
+  }, [location.state, forms, getDraft, reset]);
+
+  // Autosave draft
+  useEffect(() => {
+    if (selectedForm && Object.keys(formValues).length > 0) {
+      // Check if any field other than formId has a value
+      const hasFilledFields = Object.entries(formValues).some(
+        ([key, value]) => {
+          if (key === "formId") return false;
+          if (value === null || value === undefined || value === "")
+            return false;
+          if (Array.isArray(value) && value.length === 0) return false;
+          return true;
+        }
+      );
+
+      if (hasFilledFields) {
+        const autosaveTimeout = setTimeout(() => {
+          // Convert dayjs objects to ISO strings before saving
+          const processedFormValues = Object.entries(formValues).reduce(
+            (acc, [key, value]) => {
+              const isDateField = selectedForm.fields.some(
+                (field) => field.id === key && field.type === "date"
+              );
+              acc[key] = isDateField && value ? value.toISOString() : value;
+              return acc;
+            },
+            {}
+          );
+          saveDraft(selectedForm.formId, processedFormValues);
+        }, 1000);
+
+        return () => clearTimeout(autosaveTimeout);
+      }
+    }
+  }, [formValues, selectedForm, saveDraft]);
 
   // Get all fields that need dynamic options
   const fieldsWithDynamicOptions = useMemo(() => {
@@ -237,9 +303,14 @@ const InsuranceForm = () => {
         return (
           <Controller
             {...commonProps}
-            render={({ field }) => (
+            render={({ field: { value, onChange, ...field } }) => (
               <Form.Item label={label} required={required}>
-                <DatePicker {...field} style={{ width: "100%" }} />
+                <DatePicker
+                  {...field}
+                  value={value ? dayjs(value) : null}
+                  onChange={(date) => onChange(date)}
+                  style={{ width: "100%" }}
+                />
               </Form.Item>
             )}
           />

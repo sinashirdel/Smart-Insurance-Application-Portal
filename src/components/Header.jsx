@@ -1,5 +1,5 @@
 import { Layout, Segmented } from "antd";
-import { FileText, List } from "lucide-react";
+import { FileText, List, Save } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const { Header: AntHeader } = Layout;
@@ -15,6 +15,15 @@ const Header = () => {
         <div className="flex items-center gap-2">
           <FileText size={16} />
           <span>Insurance Forms</span>
+        </div>
+      ),
+    },
+    {
+      value: "/drafts",
+      label: (
+        <div className="flex items-center gap-2">
+          <Save size={16} />
+          <span>Drafts</span>
         </div>
       ),
     },

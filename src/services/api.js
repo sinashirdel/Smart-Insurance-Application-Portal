@@ -41,4 +41,4 @@ export const useApplications = () => {
       return data;
     },
   });
-}; 
+};
