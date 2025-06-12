@@ -15,7 +15,7 @@ const DraftsList = () => {
   };
 
   const handleContinue = (formId) => {
-    navigate("/", { state: { formId } });
+    navigate("/new-application", { state: { formId } });
   };
 
   const columns = [
@@ -51,7 +51,7 @@ const DraftsList = () => {
   ];
 
   return (
-    <Card title="Saved Drafts">
+    <Card title="Saved Drafts" className="w-full">
       {drafts.length === 0 ? (
         <div className="text-center text-gray-500">No saved drafts found</div>
       ) : (
@@ -60,6 +60,8 @@ const DraftsList = () => {
           dataSource={drafts}
           rowKey="formId"
           pagination={false}
+          scroll={{ x: "max-content" }}
+          className="responsive-table"
         />
       )}
     </Card>

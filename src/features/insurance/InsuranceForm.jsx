@@ -15,7 +15,7 @@ import {
 } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { useForms, useDynamicOptions, submitForm } from "../../services/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useDrafts } from "../../context/DraftsContext";
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
@@ -23,7 +23,6 @@ import dayjs from "dayjs";
 const InsuranceForm = () => {
   const [selectedForm, setSelectedForm] = useState(null);
   const { control, handleSubmit, watch, setValue, reset } = useForm();
-  const queryClient = useQueryClient();
   const formValues = watch();
   const { saveDraft, getDraft } = useDrafts();
   const location = useLocation();
@@ -36,9 +35,8 @@ const InsuranceForm = () => {
 
   const { mutate: submitFormMutation, isLoading: isSubmitting } = useMutation({
     mutationFn: submitForm,
-    onSuccess: () => {
+    onSuccess: (response) => {
       message.success("Application submitted successfully");
-      queryClient.invalidateQueries(["applications"]);
     },
     onError: () => {
       message.error("Failed to submit application");
@@ -139,6 +137,7 @@ const InsuranceForm = () => {
     const form = forms.find((f) => f.formId === formId);
     setSelectedForm(form);
     setValue("formId", formId);
+    reset({ formId }); // Reset form with only the new formId
   };
 
   const onSubmit = (data) => {

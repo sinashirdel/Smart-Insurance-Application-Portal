@@ -1,61 +1,52 @@
-import { Layout, Segmented } from "antd";
-import { FileText, List, Save } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-
-const { Header: AntHeader } = Layout;
+"use client";
+import { FileText, List, Save, Home } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
   const location = useLocation();
-  const navigate = useNavigate();
 
-  const options = [
+  const menu = [
+    { id: 1, name: "Home", icon: <Home size={20} />, url: "/" },
     {
-      value: "/",
-      label: (
-        <div className="flex items-center gap-2">
-          <FileText size={16} />
-          <span>Insurance Forms</span>
-        </div>
-      ),
+      id: 2,
+      name: "Forms",
+      icon: <FileText size={20} />,
+      url: "/new-application",
     },
+    { id: 3, name: "Drafts", icon: <Save size={20} />, url: "/drafts" },
     {
-      value: "/drafts",
-      label: (
-        <div className="flex items-center gap-2">
-          <Save size={16} />
-          <span>Drafts</span>
-        </div>
-      ),
-    },
-    {
-      value: "/applications",
-      label: (
-        <div className="flex items-center gap-2">
-          <List size={16} />
-          <span>Applications</span>
-        </div>
-      ),
+      id: 4,
+      name: "Applications",
+      icon: <List size={20} />,
+      url: "/applications",
     },
   ];
 
   return (
-    <AntHeader className="!w-full !px-4 sm:!px-6 md:!px-8 lg:!px-16 !flex !items-center !justify-between bg-white border-b border-gray-100 !h-auto !py-4 !sticky !top-0 !z-[1000000] !shadow-md">
-      <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="text-lg md:text-xl font-medium text-gray-900">
-          Smart Insurance Portal
-        </div>
-        <Segmented
-          value={location.pathname}
-          onChange={(value) => navigate(value)}
-          options={options}
-          className="md:!w-auto [&_.ant-segmented-item]:!flex [&_.ant-segmented-item]:!items-center [&_.ant-segmented-item]:!justify-center"
-          style={{
-            "--ant-segmented-item-selected-bg": "#f0f7ff",
-            "--ant-segmented-item-selected-color": "#1677ff",
-          }}
-        />
+    <div className="!w-full md:!py-6 !py-4 max-md:!px-4 !sticky !inset-0 !z-30 !backdrop-blur-md !bg-zinc-100/30 !border-b-[1px] !border-zinc-200">
+      <div className="md:!w-fit !w-full !p-2 !bg-white !rounded-full !flex !justify-around md:!grid !grid-cols-4 md:!grid-cols-[repeat(4,200px)] !items-center !justify-self-center">
+        {menu.map((item) => (
+          <Link
+            to={item.url}
+            key={item.id}
+            className={`!flex !gap-2 !flex-1 !items-center !justify-center !text-xs lg:!text-base !hover:text-zinc-800 !transition-all ${
+              location.pathname === item.url
+                ? "!bg-zinc-100 !text-zinc-800 !hover:bg-zinc-300/60"
+                : "!text-zinc-500"
+            }  md:!py-3 md:!px-4 !py-[6px] !px-[12px] !rounded-full`}
+          >
+            <span>{item.icon}</span>
+            <span
+              className={`${
+                location.pathname === item.url ? "!block" : "!hidden md:!block"
+              }`}
+            >
+              {item.name}
+            </span>
+          </Link>
+        ))}
       </div>
-    </AntHeader>
+    </div>
   );
 };
 
