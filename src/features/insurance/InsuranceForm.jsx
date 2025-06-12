@@ -20,6 +20,7 @@ import { useDrafts } from "../../context/DraftsContext";
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 import "./InsuranceForm.css";
+import { SyncOutlined } from "@ant-design/icons";
 
 const InsuranceForm = () => {
   const [selectedForm, setSelectedForm] = useState(null);
@@ -27,6 +28,7 @@ const InsuranceForm = () => {
   const formValues = watch();
   const { saveDraft, getDraft } = useDrafts();
   const location = useLocation();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const {
     data: forms = [],
@@ -34,17 +36,24 @@ const InsuranceForm = () => {
     error: formsError,
   } = useForms();
 
-  const { mutate: submitFormMutation, isLoading: isSubmitting } = useMutation({
+  const { mutate: submitFormMutation, isPending } = useMutation({
     mutationFn: submitForm,
     onSuccess: (response) => {
-      message.success("Application submitted successfully");
+      messageApi.open({
+        type: "success",
+        content: response.message,
+      });
     },
-    onError: () => {
-      message.error("Failed to submit application");
+    onError: (error) => {
+      messageApi.open({
+        type: "success",
+        content: error.message,
+      });
     },
   });
 
-  // Load draft if coming from drafts list
+  console.log(isPending);
+
   useEffect(() => {
     if (location.state?.formId) {
       const draft = getDraft(location.state.formId);
@@ -55,7 +64,6 @@ const InsuranceForm = () => {
           // Convert date strings to dayjs objects
           const processedDraft = Object.entries(draft).reduce(
             (acc, [key, value]) => {
-              // Check if the field is a date field
               const isDateField = form.fields.some(
                 (field) => field.id === key && field.type === "date"
               );
@@ -73,7 +81,6 @@ const InsuranceForm = () => {
   // Autosave draft
   useEffect(() => {
     if (selectedForm && Object.keys(formValues).length > 0) {
-      // Check if any field other than formId has a value
       const hasFilledFields = Object.entries(formValues).some(
         ([key, value]) => {
           if (key === "formId") return false;
@@ -86,7 +93,6 @@ const InsuranceForm = () => {
 
       if (hasFilledFields) {
         const autosaveTimeout = setTimeout(() => {
-          // Convert dayjs objects to ISO strings before saving
           const processedFormValues = Object.entries(formValues).reduce(
             (acc, [key, value]) => {
               const isDateField = selectedForm.fields.some(
@@ -105,7 +111,6 @@ const InsuranceForm = () => {
     }
   }, [formValues, selectedForm, saveDraft]);
 
-  // Get all fields that need dynamic options
   const fieldsWithDynamicOptions = useMemo(() => {
     if (!selectedForm?.fields) return [];
 
@@ -138,7 +143,7 @@ const InsuranceForm = () => {
     const form = forms.find((f) => f.formId === formId);
     setSelectedForm(form);
     setValue("formId", formId);
-    reset({ formId }); // Reset form with only the new formId
+    reset({ formId });
   };
 
   const onSubmit = (data) => {
@@ -169,7 +174,6 @@ const InsuranceForm = () => {
       dynamicOptions: dynamicOpts,
     } = field;
 
-    // Check visibility conditions
     if (visibility) {
       const { dependsOn, condition, value } = visibility;
       if (condition === "equals" && formValues[dependsOn] !== value) {
@@ -217,7 +221,6 @@ const InsuranceForm = () => {
         );
       case "number":
         if (id === "car_year") {
-          // Generate year options
           const yearOptions = [];
           for (
             let year = validation?.max || 2025;
@@ -253,9 +256,8 @@ const InsuranceForm = () => {
           );
         }
         if (id === "home_value") {
-          // Generate value options with appropriate steps
           const valueOptions = [];
-          const step = 50000; // $50,000 steps
+          const step = 50000;
           for (
             let value = validation?.min || 50000;
             value <= (validation?.max || 5000000);
@@ -408,6 +410,7 @@ const InsuranceForm = () => {
 
   return (
     <div className="form-container">
+      {contextHolder}
       <Card className="form-card">
         <Form.Item label="Select Insurance Type" required>
           <Select
@@ -438,7 +441,7 @@ const InsuranceForm = () => {
               <div key={field.id}>{renderField(field)}</div>
             ))}
             <Form.Item>
-              <Button type="primary" htmlType="submit" loading={isSubmitting}>
+              <Button loading={isPending} type="primary" htmlType="submit">
                 Submit Application
               </Button>
             </Form.Item>

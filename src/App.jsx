@@ -8,7 +8,6 @@ import Header from "./components/Header";
 import { DraftsProvider } from "./context/DraftsContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import "./App.css";
-import "./styles/theme.css";
 
 const { Content } = Layout;
 

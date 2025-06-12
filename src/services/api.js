@@ -5,7 +5,6 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
-// Forms API
 export const useForms = () => {
   return useQuery({
     queryKey: ["forms"],
@@ -30,15 +29,4 @@ export const useDynamicOptions = (endpoint, params) => {
 export const submitForm = async (formData) => {
   const { data } = await api.post("/api/insurance/forms/submit", formData);
   return data;
-};
-
-// Applications API
-export const useApplications = () => {
-  return useQuery({
-    queryKey: ["applications"],
-    queryFn: async () => {
-      const { data } = await api.get("/api/insurance/forms/submissions");
-      return data;
-    },
-  });
 };

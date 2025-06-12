@@ -7,6 +7,7 @@ const DraftsList = () => {
   const { getAllDrafts, deleteDraft } = useDrafts();
   const navigate = useNavigate();
   const { data: forms = [] } = useForms();
+  
   const drafts = getAllDrafts();
 
   const handleDelete = (formId) => {

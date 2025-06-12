@@ -1,6 +1,6 @@
 .header-container {
   width: 100%;
-  padding: 1rem 0;
+  padding: 1rem 16px;
   position: sticky;
   top: 0;
   z-index: 30;
@@ -10,12 +10,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 5px;
 }
 
 .header-menu {
   /* width: 100%; */
-  padding: 0.5rem;
+  padding: 0.5rem 0;
   /* background-color: var(--card-bg); */
   /* border-radius: 9999px; */
   display: flex;
@@ -32,6 +32,8 @@
 
   .header-menu {
     width: fit-content;
+    padding: 0.5rem;
+
     /* display: grid; */
     /* grid-template-columns: repeat(4, 200px); */
     /* margin: 0 auto; */
