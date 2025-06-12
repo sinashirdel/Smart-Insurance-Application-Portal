@@ -15,6 +15,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import "./ApplicationsList.css";
 
 const RowContext = React.createContext({});
 
@@ -65,7 +66,7 @@ const ApplicationsList = () => {
   };
 
   const columnSettings = (
-    <div className="p-4">
+    <div className="column-settings">
       <Space direction="vertical">
         {columns.map((column) => (
           <Checkbox
@@ -164,16 +165,16 @@ const ApplicationsList = () => {
   return (
     <Card
       title="Applications"
-      className="w-full"
+      className="applications-card"
       extra={
-        <div className="hidden md:block">
-          <Space className="w-full">
+        <div className="desktop-controls">
+          <Space className="controls-space">
             <Input
               placeholder="Search..."
               prefix={<Search size={16} />}
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              className="!w-full"
+              className="search-input"
               allowClear
             />
             <Popover
@@ -188,14 +189,14 @@ const ApplicationsList = () => {
         </div>
       }
     >
-      <div className="md:hidden mb-4">
-        <Space className="w-full" direction="vertical" size="small">
+      <div className="mobile-controls">
+        <Space className="controls-space" direction="vertical" size="small">
           <Input
             placeholder="Search..."
             prefix={<Search size={16} />}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            className="!w-full"
+            className="search-input"
             allowClear
           />
           <Popover
@@ -223,7 +224,7 @@ const ApplicationsList = () => {
             loading={isLoading}
             rowKey="key"
             scroll={{ x: "max-content" }}
-            className="w-full"
+            className="applications-table"
             components={{ body: { row: Row } }}
             pagination={{
               pageSize: 10,

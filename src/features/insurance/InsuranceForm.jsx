@@ -19,6 +19,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useDrafts } from "../../context/DraftsContext";
 import { useLocation } from "react-router-dom";
 import dayjs from "dayjs";
+import "./InsuranceForm.css";
 
 const InsuranceForm = () => {
   const [selectedForm, setSelectedForm] = useState(null);
@@ -383,7 +384,7 @@ const InsuranceForm = () => {
 
   if (isLoadingForms) {
     return (
-      <div className="flex justify-center items-center min-h-[400px]">
+      <div className="loading-container">
         <Spin size="large" />
       </div>
     );
@@ -392,7 +393,7 @@ const InsuranceForm = () => {
   if (formsError) {
     return (
       <Card>
-        <div className="text-red-500 text-center">Failed to load forms</div>
+        <div className="error-message">Failed to load forms</div>
       </Card>
     );
   }
@@ -400,14 +401,14 @@ const InsuranceForm = () => {
   if (!forms?.length) {
     return (
       <Card>
-        <div className="text-center">No forms available</div>
+        <div className="empty-message">No forms available</div>
       </Card>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto !space-y-4">
-      <Card className="mb-4">
+    <div className="form-container">
+      <Card className="form-card">
         <Form.Item label="Select Insurance Type" required>
           <Select
             value={selectedForm?.formId}
@@ -423,7 +424,7 @@ const InsuranceForm = () => {
       {selectedForm && (
         <Card title={selectedForm.title}>
           <Form
-            className="!space-y-4"
+            className="insurance-form"
             layout="vertical"
             onFinish={handleSubmit(onSubmit)}
           >

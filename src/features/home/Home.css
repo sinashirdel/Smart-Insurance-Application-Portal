@@ -1,0 +1,44 @@
+.home-container {
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.home-title {
+  text-align: center;
+  margin-bottom: 2rem !important;
+  color: var(--text-primary);
+}
+
+.home-card {
+  height: 100%;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+.home-card:hover {
+  border-color: #1677ff;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.card-icon {
+  color: #1677ff;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: 1.25rem !important;
+  margin-bottom: 0.5rem !important;
+  color: var(--text-primary);
+}
+
+.card-description {
+  color: var(--text-secondary);
+}

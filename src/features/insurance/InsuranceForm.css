@@ -1,0 +1,43 @@
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.error-message {
+  color: #ff4d4f;
+  text-align: center;
+}
+
+.empty-message {
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.form-container {
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+.form-container > * + * {
+  margin-top: 1rem;
+}
+
+.form-card {
+  margin-bottom: 1rem;
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+.insurance-form > * + * {
+  margin-top: 1rem;
+}
+
+.insurance-form .ant-form-item-label > label {
+  color: var(--text-primary);
+}
+
+.insurance-form .ant-card-head-title {
+  color: var(--text-primary);
+} 

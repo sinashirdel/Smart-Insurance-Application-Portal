@@ -1,6 +1,10 @@
-import { Card, Row, Col } from "antd";
+import { Card, Row, Col, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import { FileText, List, Save } from "lucide-react";
+import "./Home.css";
+
+const { Title } = Typography;
+
 const Home = () => {
   const navigate = useNavigate();
 
@@ -26,19 +30,20 @@ const Home = () => {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold text-center mb-8">Insurance Portal</h1>
+    <div className="home-container">
+      <Title level={1} className="home-title">
+        Insurance Portal
+      </Title>
       <Row gutter={[24, 24]}>
         {cards.map((card, index) => (
           <Col xs={24} sm={12} md={8} key={index}>
-            <Card
-              className="h-full cursor-pointer transition-all border-1 hover:!border-primary"
-              onClick={card.onClick}
-            >
-              <div className="flex flex-col items-center text-center">
-                <div className="text-primary-500 mb-4">{card.icon}</div>
-                <h2 className="text-xl font-semibold mb-2">{card.title}</h2>
-                <p className="text-gray-600">{card.description}</p>
+            <Card className="home-card" onClick={card.onClick}>
+              <div className="card-content">
+                <div className="card-icon">{card.icon}</div>
+                <Title level={2} className="card-title">
+                  {card.title}
+                </Title>
+                <p className="card-description">{card.description}</p>
               </div>
             </Card>
           </Col>
