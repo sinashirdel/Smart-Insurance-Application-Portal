@@ -1,11 +1,11 @@
 .column-settings {
   padding: 1rem;
-  background-color: var(--card-bg);
+  /* background-color: var(--card-bg); */
 }
 
 .applications-card {
   width: 100%;
-  background-color: var(--card-bg);
+  /* background-color: var(--card-bg); */
   border-color: var(--border-color);
 }
 
@@ -42,7 +42,7 @@
 }
 
 .applications-table .ant-table {
-  background-color: var(--card-bg);
+  /* background-color: var(--card-bg); */
 }
 
 .applications-table .ant-table-thead > tr > th {
