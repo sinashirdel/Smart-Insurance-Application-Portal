@@ -135,3 +135,4 @@ https://assignment.devotel.io
    - Dark mode preference is saved in local storage
    - Theme switching is smooth and maintains state
    - All components support both light and dark themes
+# Smart-Insurance-Application-Portal
