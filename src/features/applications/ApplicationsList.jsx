@@ -29,9 +29,7 @@ const ApplicationsList = () => {
   const { data: apiData, isLoading } = useQuery({
     queryKey: ["applications"],
     queryFn: async () => {
-      const response = await axios.get(
-        "https://assignment.devotel.io/api/insurance/forms/submissions"
-      );
+      const response = await api.get("/api/insurance/forms/submissions");
       setColumns(response.data.columns);
       setVisibleColumns(response.data.columns);
       setDataSource(
