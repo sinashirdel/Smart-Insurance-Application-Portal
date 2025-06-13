@@ -142,10 +142,9 @@ const ApplicationsList = () => {
   });
 
   return (
-    <Card
-      title="Applications"
-      className="applications-card"
-      extra={
+    <Card className="applications-card">
+      <div className="card-header">
+        <h2>Applications</h2>
         <Controls
           searchText={searchText}
           onSearchChange={setSearchText}
@@ -153,8 +152,7 @@ const ApplicationsList = () => {
           visibleColumns={visibleColumns}
           onColumnToggle={handleColumnToggle}
         />
-      }
-    >
+      </div>
       <DndContext
         modifiers={[restrictToVerticalAxis, restrictToParentElement]}
         onDragEnd={onDragEnd}

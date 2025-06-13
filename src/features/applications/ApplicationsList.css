@@ -58,3 +58,26 @@
 .applications-table .ant-table-tbody > tr:hover > td {
   background-color: var(--hover-bg);
 }
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.card-header h2 {
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .card-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .card-header h2 {
+    margin-bottom: 0;
+  }
+}
