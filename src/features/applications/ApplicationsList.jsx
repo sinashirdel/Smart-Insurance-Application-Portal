@@ -17,6 +17,7 @@ import { CSS } from "@dnd-kit/utilities";
 import Controls from "./components/Controls";
 import DragHandle from "./components/DragHandle";
 import "./ApplicationsList.css";
+import { api } from "../../services/api";
 
 export const RowContext = React.createContext({});
 
