@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
-import { Table, Card, Button, Space, Popover, Checkbox, Input } from "antd";
-import { Settings2, Search, GripVertical } from "lucide-react";
+import { Table, Card } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { DndContext, closestCenter } from "@dnd-kit/core";
@@ -15,23 +14,11 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import Controls from "./components/Controls";
+import DragHandle from "./components/DragHandle";
 import "./ApplicationsList.css";
 
-const RowContext = React.createContext({});
-
-const DragHandle = () => {
-  const { setActivatorNodeRef, listeners } = useContext(RowContext);
-  return (
-    <Button
-      type="text"
-      size="small"
-      icon={<GripVertical size={16} />}
-      style={{ cursor: "move" }}
-      ref={setActivatorNodeRef}
-      {...listeners}
-    />
-  );
-};
+export const RowContext = React.createContext({});
 
 const ApplicationsList = () => {
   const [columns, setColumns] = useState([]);
@@ -58,28 +45,20 @@ const ApplicationsList = () => {
   });
 
   const handleColumnToggle = (column) => {
-    setVisibleColumns((prev) =>
-      prev.includes(column)
-        ? prev.filter((col) => col !== column)
-        : [...prev, column]
-    );
+    setVisibleColumns((prev) => {
+      if (prev.includes(column)) {
+        // Remove the column
+        return prev.filter((col) => col !== column);
+      } else {
+        // Find the index of the column in the original columns array
+        const originalIndex = columns.findIndex((col) => col === column);
+        // Create a new array with the column inserted at its original position
+        const newVisibleColumns = [...prev];
+        newVisibleColumns.splice(originalIndex, 0, column);
+        return newVisibleColumns;
+      }
+    });
   };
-
-  const columnSettings = (
-    <div className="column-settings">
-      <Space direction="vertical">
-        {columns.map((column) => (
-          <Checkbox
-            key={column}
-            checked={visibleColumns.includes(column)}
-            onChange={() => handleColumnToggle(column)}
-          >
-            {column}
-          </Checkbox>
-        ))}
-      </Space>
-    </div>
-  );
 
   const Row = (props) => {
     const {
@@ -167,48 +146,15 @@ const ApplicationsList = () => {
       title="Applications"
       className="applications-card"
       extra={
-        <div className="desktop-controls">
-          <Space className="controls-space">
-            <Input
-              placeholder="Search..."
-              prefix={<Search size={16} />}
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              className="search-input"
-              allowClear
-            />
-            <Popover
-              content={columnSettings}
-              title="Column Settings"
-              trigger="click"
-              placement="bottomRight"
-            >
-              <Button icon={<Settings2 size={16} />}>Columns</Button>
-            </Popover>
-          </Space>
-        </div>
+        <Controls
+          searchText={searchText}
+          onSearchChange={setSearchText}
+          columns={columns}
+          visibleColumns={visibleColumns}
+          onColumnToggle={handleColumnToggle}
+        />
       }
     >
-      <div className="mobile-controls">
-        <Space className="controls-space" direction="vertical" size="small">
-          <Input
-            placeholder="Search..."
-            prefix={<Search size={16} />}
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            className="search-input"
-            allowClear
-          />
-          <Popover
-            content={columnSettings}
-            title="Column Settings"
-            trigger="click"
-            placement="bottomRight"
-          >
-            <Button icon={<Settings2 size={16} />}>Columns</Button>
-          </Popover>
-        </Space>
-      </div>
       <DndContext
         modifiers={[restrictToVerticalAxis, restrictToParentElement]}
         onDragEnd={onDragEnd}

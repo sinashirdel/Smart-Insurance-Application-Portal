@@ -4,10 +4,10 @@ import InsuranceForm from "./features/insurance/InsuranceForm";
 import ApplicationsList from "./features/applications/ApplicationsList";
 import DraftsList from "./features/drafts/DraftsList";
 import Home from "./features/home/Home";
-import Header from "./components/Header";
 import { DraftsProvider } from "./context/DraftsContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import "./App.css";
+import Header from "./components/layout/Header";
 
 const { Content } = Layout;
 
