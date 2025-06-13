@@ -17,7 +17,6 @@ import { CSS } from "@dnd-kit/utilities";
 import Controls from "./components/Controls";
 import DragHandle from "./components/DragHandle";
 import "./ApplicationsList.css";
-import { api } from "../../services/api";
 
 export const RowContext = React.createContext({});
 
@@ -30,7 +29,9 @@ const ApplicationsList = () => {
   const { data: apiData, isLoading } = useQuery({
     queryKey: ["applications"],
     queryFn: async () => {
-      const response = await api.get("/api/insurance/forms/submissions");
+      const response = await axios.get(
+        "https://assignment.devotel.io/api/insurance/forms/submissions"
+      );
       setColumns(response.data.columns);
       setVisibleColumns(response.data.columns);
       setDataSource(
