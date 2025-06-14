@@ -81,3 +81,10 @@
     margin-bottom: 0;
   }
 }
+
+
+.sortable-ghost {
+  opacity: 0.4;
+  /* background-color: #6d6d6d; */
+}
+
